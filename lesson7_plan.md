@@ -37,26 +37,17 @@ Rule: tasks expected to run **> 2 minutes** get a parallel implementation. Short
 | Task 3 — MLP training (~10 epochs) | ~1–2 min | Sequential (single GPU/CPU loop, can't parallelise) | — |
 | Part 2 — CharRNN training | ~5–15 min | Sequential (stateful RNN, can't parallelise epochs) | — |
 
-**Pattern 1 — Independent model training** (Task 2):
+**Pattern 1 — Word2Vec model training** (Task 2):
+
+Train sequentially with `workers=4` per model. Gensim parallelises internally via Cython
+threads — no Python executor needed and no concurrency errors.
+
 ```python
-from concurrent.futures import ProcessPoolExecutor
-
-def train_w2v(config):
-    name, sg, dim, sentences = config
-    model = Word2Vec(sentences=sentences, vector_size=dim,
-                     window=5, min_count=2, sg=sg, workers=2)
-    return name, model
-
-configs = [(f"{arch}_{dim}", sg, dim, tokenized_sentences)
-           for arch, sg in [("CBOW", 0), ("SkipGram", 1)]
-           for dim in [50, 100, 200]]
-
-with ProcessPoolExecutor(max_workers=6) as pool:
-    results = list(pool.map(train_w2v, configs))
-
-models = dict(results)
+models = {}
+for name, sg, dim in configs:
+    models[name] = Word2Vec(sentences=tokenized_sentences, vector_size=dim,
+                            window=5, min_count=2, sg=sg, workers=4, seed=42)
 ```
-Note: `tokenized_sentences` must be picklable (plain list of lists of str ✓).
 
 **Pattern 2 — Parallel map over large dataset** (Task 3):
 ```python
