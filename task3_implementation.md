@@ -57,7 +57,7 @@ Mean pooling discards word order entirely. "Oil prices rise" and "Rise in oil pr
 
 For short, topic-focused news headlines this doesn't hurt much — the vocabulary alone is discriminative. For longer texts or tasks requiring understanding of sentence structure, an RNN (or Transformer) would outperform the MLP.
 
-## Expected Output
+## Actual Output
 
 ```
 Chosen embedding dimension: 100
@@ -75,9 +75,18 @@ MLP(
   )
 )
 
-Epoch  1/10, Loss: ~700–900
-...
-Epoch 10/10, Loss: ~300–450
+Epoch  1/10, Loss: 724.0443
+Epoch  2/10, Loss: 620.2611
+Epoch  3/10, Loss: 594.7356
+Epoch  4/10, Loss: 575.6549
+Epoch  5/10, Loss: 563.7621
+Epoch  6/10, Loss: 549.2634
+Epoch  7/10, Loss: 539.9432
+Epoch  8/10, Loss: 531.4073
+Epoch  9/10, Loss: 521.5541
+Epoch 10/10, Loss: 514.7221
 ```
 
-Expected test accuracy after Task 4 evaluation: roughly **85–88%**. The main confusion will be between Business and Sci/Tech (tech-business articles overlap heavily in AG News).
+Average per-batch loss at epoch 10: 514.7 / 1875 batches ≈ 0.27 (random chance = ln(4) ≈ 1.39).
+Loss still declining at epoch 10 — 5–10 more epochs would improve accuracy slightly.
+Expected test accuracy after Task 4 evaluation: roughly **85–88%**. Main confusion: Business vs Sci/Tech.
