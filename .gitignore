@@ -1,0 +1,15 @@
+.env
+.env.*
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
+.claude/
+.venv/
+*.zip
+# Large model files (>5 MB)
+saved_models/X_train.npy
+saved_models/train_df.parquet
+saved_models/w2v_CBOW_100.model
+saved_models/w2v_SkipGram_100.model
+saved_models/w2v_CBOW_200.model
+saved_models/w2v_SkipGram_200.model
